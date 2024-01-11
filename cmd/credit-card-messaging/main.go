@@ -1,7 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"github.com/arturbaccarin/credit-card-messaging/internal/rabbit"
+)
 
 func main() {
-	fmt.Println("First commit!")
+	conn := rabbit.NewConnection()
+	ch := rabbit.NewChannel(conn)
+
+	rabbit.Publish(ch)
 }

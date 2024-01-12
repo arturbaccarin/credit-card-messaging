@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/arturbaccarin/credit-card-messaging/internal/rabbit"
+	"github.com/arturbaccarin/credit-card-messaging/rabbitmq-service/internal/rabbit"
 )
 
 func main() {

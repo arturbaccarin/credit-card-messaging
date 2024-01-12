@@ -1,4 +1,4 @@
-module github.com/arturbaccarin/credit-card-messaging
+module github.com/arturbaccarin/credit-card-messaging/rabbitmq-service
 
 go 1.21.4
 

@@ -9,4 +9,5 @@ func main() {
 	ch := rabbit.NewChannel(conn)
 
 	rabbit.Publish(ch)
+	rabbit.Consume(ch)
 }

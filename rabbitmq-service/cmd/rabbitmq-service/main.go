@@ -1,13 +1,11 @@
 package main
 
-import (
-	"github.com/arturbaccarin/credit-card-messaging/rabbitmq-service/internal/rabbit"
-)
+import "github.com/arturbaccarin/credit-card-messaging/rabbitmq-service/pkg/rabbitmq"
 
 func main() {
-	conn := rabbit.NewConnection()
-	ch := rabbit.NewChannel(conn)
+	conn := rabbitmq.NewConnection()
+	ch := rabbitmq.NewChannel(conn)
 
-	rabbit.Publish(ch)
-	rabbit.Consume(ch)
+	rabbitmq.Publish(ch)
+	rabbitmq.Consume(ch)
 }

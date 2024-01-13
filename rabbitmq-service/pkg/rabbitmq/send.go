@@ -8,7 +8,7 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
-func Publish(ch *amqp.Channel) {
+func Publish(ch *amqp.Channel, message string) {
 	q, err := ch.QueueDeclare(
 		"hello", // name
 		false,   // durable
@@ -22,7 +22,6 @@ func Publish(ch *amqp.Channel) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	body := "Hello World!"
 	err = ch.PublishWithContext(ctx,
 		"",     // exchange
 		q.Name, // routing key
@@ -30,8 +29,8 @@ func Publish(ch *amqp.Channel) {
 		false,  // immediate
 		amqp.Publishing{
 			ContentType: "text/plain",
-			Body:        []byte(body),
+			Body:        []byte(message),
 		})
 	failOnError(err, "Failed to publish a message")
-	log.Printf(" [x] Sent %s\n", body)
+	log.Printf(" [x] Sent %s\n", message)
 }

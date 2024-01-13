@@ -1,16 +1,26 @@
-version: '3'
+version: "3.9"
 
-name: rabbitmq
 services:
-    rabbitmq:
-        image: rabbitmq:3.8.16-management
-        container_name: rabbitmq
-        hostname: rabbitmq
+
+    # Create service with RabbitMQ.
+    message-broker:
+        image: rabbitmq:3-management-alpine
+        container_name: message-broker
         ports:
-            - "5672:5672"
-            - "15672:15672"
-            - "15692:15692"
+            - 5672:5672 # for sender and consumer connections
+            - 15672:15672 # for serve RabbitMQ GUI
+        volumes:
+            - ../dev-rabbitmq/data/:/var/lib/rabbitmq
+            - ../dev-rabbitmq/log/:/var/log/rabbitmq
         environment:
             - RABBITMQ_DEFAULT_USER=guest
             - RABBITMQ_DEFAULT_PASS=guest
             - RABBITMQ_DEFAULT_VHOST=/
+        restart: always
+        networks:
+            - dev-network
+
+networks:
+    # Create a new Docker network.
+    dev-network:
+        driver: bridge

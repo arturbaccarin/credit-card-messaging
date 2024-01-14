@@ -2,11 +2,14 @@ package rabbitmq
 
 import (
 	"log"
+	"sync"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
-func Consume(ch *amqp.Channel) {
+func Consume(ch *amqp.Channel) ([]byte, error) {
+	var messages []byte
+
 	q, err := ch.QueueDeclare(
 		"hello", // name
 		false,   // durable
@@ -15,7 +18,10 @@ func Consume(ch *amqp.Channel) {
 		false,   // no-wait
 		nil,     // arguments
 	)
-	failOnError(err, "Failed to declare a queue")
+
+	if err != nil {
+		return nil, err
+	}
 
 	msgs, err := ch.Consume(
 		q.Name, // queue
@@ -27,16 +33,26 @@ func Consume(ch *amqp.Channel) {
 		nil,    // args
 	)
 
-	failOnError(err, "Failed to register a consumer")
+	if err != nil {
+		return nil, err
+	}
 
-	var forever chan struct{}
+	var wg sync.WaitGroup
+	wg.Add(10)
 
 	go func() {
-		for d := range msgs {
-			log.Printf("Received a message: %s", d.Body)
+		for {
+			select {
+			case <-msgs:
+				log.Println("ok")
+			default:
+				wg.Done()
+				return
+			}
 		}
 	}()
 
-	log.Printf(" [*] Waiting for messages. To exit press CTRL+C")
-	<-forever
+	wg.Wait()
+
+	return messages, nil
 }

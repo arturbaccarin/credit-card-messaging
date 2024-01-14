@@ -3,6 +3,7 @@ package rabbitmq
 import (
 	"log"
 	"sync"
+	"time"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 )
@@ -38,21 +39,28 @@ func Consume(ch *amqp.Channel) ([]byte, error) {
 	}
 
 	var wg sync.WaitGroup
-	wg.Add(10)
+	// done := make(chan bool)
+	wg.Add(1)
 
 	go func() {
-		for {
-			select {
-			case <-msgs:
-				log.Println("ok")
-			default:
-				wg.Done()
-				return
-			}
+		log.Println("Here I am in time 1")
+		time.Sleep(2 * time.Second)
+		wg.Done()
+		log.Println("Here I am in time 2")
+	}()
+
+	go func() {
+		for msg := range msgs {
+			log.Printf(" > Received message: %s\n", msg.Body)
+			wg.Done()
+			break
 		}
+		log.Println("out1")
 	}()
 
 	wg.Wait()
+	log.Println("out2")
+	ch.Close()
 
 	return messages, nil
 }

@@ -8,24 +8,30 @@ import (
 )
 
 type SendHandler struct {
-	ch *amqp.Channel
+	conn *amqp.Connection
 }
 
-func NewSendHandler(ch *amqp.Channel) *SendHandler {
+func NewSendHandler(conn *amqp.Connection) *SendHandler {
 	return &SendHandler{
-		ch: ch,
+		conn: conn,
 	}
 }
 
 func (s SendHandler) SendMessage(c *fiber.Ctx) error {
+	ch, err := rabbitmq.NewChannel(s.conn)
+	if err != nil {
+		return err
+	}
+	defer ch.Close()
+
 	var message dto.MessagePayload
 
-	err := c.BodyParser(&message)
+	err = c.BodyParser(&message)
 	if err != nil {
 		return err
 	}
 
-	rabbitmq.Publish(s.ch, message.Message)
+	rabbitmq.Publish(ch, message.Message)
 
 	return nil
 }

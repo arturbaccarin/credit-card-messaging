@@ -11,15 +11,14 @@ import (
 
 func main() {
 	conn := rabbitmq.NewConnection()
-	ch := rabbitmq.NewChannel(conn)
 
 	app := fiber.New()
 	app.Use(
 		logger.New(),
 	)
 
-	sendHandler := handler.NewSendHandler(ch)
-	receiveHandler := handler.NewReceiveHandler(ch)
+	sendHandler := handler.NewSendHandler(conn)
+	receiveHandler := handler.NewReceiveHandler(conn)
 
 	app.Post("/send", sendHandler.SendMessage)
 	app.Get("/receive", receiveHandler.ReceiveMessages)

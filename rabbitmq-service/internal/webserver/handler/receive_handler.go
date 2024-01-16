@@ -7,17 +7,23 @@ import (
 )
 
 type ReceiveHandler struct {
-	ch *amqp.Channel
+	conn *amqp.Connection
 }
 
-func NewReceiveHandler(ch *amqp.Channel) *ReceiveHandler {
+func NewReceiveHandler(conn *amqp.Connection) *ReceiveHandler {
 	return &ReceiveHandler{
-		ch: ch,
+		conn: conn,
 	}
 }
 
 func (r ReceiveHandler) ReceiveMessages(c *fiber.Ctx) error {
-	messages, err := rabbitmq.Consume(r.ch)
+	ch, err := rabbitmq.NewChannel(r.conn)
+	if err != nil {
+		return err
+	}
+	defer ch.Close()
+
+	messages, err := rabbitmq.Consume(ch)
 	if err != nil {
 		return err
 	}

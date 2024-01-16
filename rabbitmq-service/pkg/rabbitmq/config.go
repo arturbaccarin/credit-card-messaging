@@ -8,20 +8,13 @@ import (
 
 func NewConnection() *amqp.Connection {
 	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
-	failOnError(err, "Failed to connect to RabbitMQ")
+	if err != nil {
+		log.Panicf("%s: %s", "Failed to connect to RabbitMQ", err)
+	}
 
 	return conn
 }
 
-func NewChannel(conn *amqp.Connection) *amqp.Channel {
-	ch, err := conn.Channel()
-	failOnError(err, "Failed to open a channel")
-
-	return ch
-}
-
-func failOnError(err error, msg string) {
-	if err != nil {
-		log.Panicf("%s: %s", msg, err)
-	}
+func NewChannel(conn *amqp.Connection) (*amqp.Channel, error) {
+	return conn.Channel()
 }

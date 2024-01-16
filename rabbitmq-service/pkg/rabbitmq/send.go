@@ -17,7 +17,9 @@ func Publish(ch *amqp.Channel, message string) {
 		false,   // no-wait
 		nil,     // arguments
 	)
-	failOnError(err, "Failed to declare a queue")
+	if err != nil {
+		log.Panicf("%s: %s", "Failed to declare a queue", err)
+	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -31,6 +33,9 @@ func Publish(ch *amqp.Channel, message string) {
 			ContentType: "text/plain",
 			Body:        []byte(message),
 		})
-	failOnError(err, "Failed to publish a message")
+	if err != nil {
+		log.Panicf("%s: %s", "Failed to publish a message", err)
+	}
+
 	log.Printf(" [x] Sent %s\n", message)
 }

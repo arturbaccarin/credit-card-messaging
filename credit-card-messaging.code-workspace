@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			// RabbitMQ structure and apis
+			"name": "RabbitMQ Service",
+			"path": "./rabbitmq-service"
+		},
+		{
+			// Generate payment orders
+			"name": "Payment Service",
+			"path": "./payment-service"
+		}
+	],
+	"settings": {}
+}

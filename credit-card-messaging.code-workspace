@@ -9,6 +9,14 @@
 			// Generate payment orders
 			"name": "Payment Service",
 			"path": "./payment-service"
+		},
+		{
+			// Generate payment orders
+			"name": "Register Service",
+			"path": "./register-service"
+		},
+		{
+			"path": "."
 		}
 	],
 	"settings": {}

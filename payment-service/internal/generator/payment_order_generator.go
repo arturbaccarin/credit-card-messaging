@@ -9,19 +9,19 @@ import (
 )
 
 type PaymentOrderGenerator struct {
-	mumberOfCopies int
+	numberOfCopies int
 }
 
 func NewPaymentOrderGenerator(numberOfCopies int) *PaymentOrderGenerator {
 	return &PaymentOrderGenerator{
-		mumberOfCopies: numberOfCopies,
+		numberOfCopies: numberOfCopies,
 	}
 }
 
 func (s PaymentOrderGenerator) GenerateCopies() []model.PaymentOrder {
-	paymentOrders := make([]model.PaymentOrder, 0, s.mumberOfCopies)
+	paymentOrders := make([]model.PaymentOrder, 0, s.numberOfCopies)
 
-	for i := 0; i < s.mumberOfCopies; i++ {
+	for i := 0; i < s.numberOfCopies; i++ {
 		paymentOrder := model.PaymentOrder{
 			ID:        uuid.New(),
 			Value:     rand.Float64() * 100.0,

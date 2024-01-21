@@ -23,8 +23,5 @@ func main() {
 	app.Post("/send", sendHandler.SendMessage)
 	app.Get("/receive", receiveHandler.ReceiveMessages)
 
-	// https://dev.to/koddr/working-with-rabbitmq-in-golang-by-examples-2dcn
-	// rabbitmq.Publish(ch)
-	// rabbitmq.Consume(ch)
 	log.Fatal(app.Listen(":3000"))
 }

@@ -2,7 +2,6 @@ package rabbitmq
 
 import (
 	"log"
-	"sync"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 )
@@ -18,7 +17,6 @@ func Consume(ch *amqp.Channel) ([]byte, error) {
 		false,   // no-wait
 		nil,     // arguments
 	)
-
 	if err != nil {
 		return nil, err
 	}
@@ -37,23 +35,17 @@ func Consume(ch *amqp.Channel) ([]byte, error) {
 		return nil, err
 	}
 
-	var wg sync.WaitGroup
-
 	go func() {
 		for {
-			wg.Add(1)
 			msg, ok := <-msgs
 			if !ok {
-				wg.Done()
 				break
 			}
-
 			log.Printf(" > Received message: %s\n", msg.Body)
-			wg.Done()
 		}
 	}()
 
-	wg.Wait()
+	ch.Close()
 
 	return messages, nil
 }

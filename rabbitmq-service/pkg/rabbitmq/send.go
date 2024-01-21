@@ -9,6 +9,7 @@ import (
 )
 
 func Publish(ch *amqp.Channel, message string) {
+	defer ch.Close()
 	q, err := ch.QueueDeclare(
 		"hello", // name
 		false,   // durable

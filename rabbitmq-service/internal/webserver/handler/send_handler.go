@@ -22,7 +22,6 @@ func (s SendHandler) SendMessage(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	defer ch.Close()
 
 	var message dto.MessagePayload
 

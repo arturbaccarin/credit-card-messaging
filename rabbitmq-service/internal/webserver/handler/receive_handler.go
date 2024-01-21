@@ -21,13 +21,11 @@ func (r ReceiveHandler) ReceiveMessages(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	defer ch.Close()
 
 	messages, err := rabbitmq.Consume(ch)
 	if err != nil {
 		return err
 	}
 
-	_, err = c.Write(messages)
-	return err
+	return c.SendString(string(messages))
 }

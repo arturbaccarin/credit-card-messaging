@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/arturbaccarin/credit-card-messaging/rabbitmq-service/internal/dto"
 	"github.com/arturbaccarin/credit-card-messaging/rabbitmq-service/pkg/rabbitmq"
 	"github.com/gofiber/fiber/v2"
 	amqp "github.com/rabbitmq/amqp091-go"
@@ -27,5 +28,10 @@ func (r ReceiveHandler) ReceiveMessages(c *fiber.Ctx) error {
 		return err
 	}
 
-	return c.SendString(string(messages))
+	var res dto.MessagesResponse
+	for _, message := range messages {
+		res.Messages = append(res.Messages, string(message))
+	}
+
+	return c.JSON(res)
 }

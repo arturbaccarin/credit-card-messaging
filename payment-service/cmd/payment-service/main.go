@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/arturbaccarin/credit-card-messaging/payment-service/internal/generator"
@@ -11,7 +12,19 @@ func main() {
 
 	paymentOrders := paymentOrderGenerator.GenerateCopies()
 
-	for _, t := range paymentOrders {
-		fmt.Println(t)
+	for _, paymentOrder := range paymentOrders {
+		jsonData, err := json.Marshal(paymentOrder)
+		if err != nil {
+			fmt.Println("Error marshalling struct to JSON:", err)
+			continue
+		}
+
+		requestBody := struct {
+			Message string
+		}{
+			string(jsonData),
+		}
+
 	}
+
 }

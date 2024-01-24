@@ -7,8 +7,8 @@ import (
 )
 
 type PaymentOrder struct {
-	ID        uuid.UUID
-	Value     float64
-	Date      time.Time
-	NeedAudit bool
+	ID        uuid.UUID `json:"id"`
+	Value     float64   `json:"value"`
+	Date      time.Time `json:"date"`
+	NeedAudit bool      `json:"need_audit"`
 }

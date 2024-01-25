@@ -1,10 +1,13 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"net/http"
 
 	"github.com/arturbaccarin/credit-card-messaging/payment-service/internal/generator"
+	"github.com/arturbaccarin/credit-card-messaging/payment-service/internal/model"
 )
 
 func main() {
@@ -13,18 +16,27 @@ func main() {
 	paymentOrders := paymentOrderGenerator.GenerateCopies()
 
 	for _, paymentOrder := range paymentOrders {
-		jsonData, err := json.Marshal(paymentOrder)
+		message, err := json.Marshal(paymentOrder)
 		if err != nil {
 			fmt.Println("Error marshalling struct to JSON:", err)
 			continue
 		}
 
-		requestBody := struct {
-			Message string
-		}{
-			string(jsonData),
+		body := model.RabbitMQPayload{
+			Message: string(message),
 		}
 
-	}
+		payload, err := json.Marshal(body)
+		if err != nil {
+			fmt.Println("Error marshalling struct to JSON:", err)
+			continue
+		}
 
+		_, err = http.Post("http://localhost:3000/send", "application/json", bytes.NewBuffer(payload))
+		if err != nil {
+			fmt.Println("Error sending message:", err)
+		}
+
+		fmt.Println("Message sent successfully")
+	}
 }

@@ -11,5 +11,12 @@
             "mode": "auto",
             "program": "${workspaceFolder}/rabbitmq-service/cmd/rabbitmq-service"
         },
+        {
+            "name": "Register",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/register-service/cmd/register-service"
+        },
     ]
 }

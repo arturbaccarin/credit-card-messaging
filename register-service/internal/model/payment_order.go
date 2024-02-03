@@ -8,7 +8,7 @@ import (
 
 type PaymentOrder struct {
 	ID             int
-	paymentOrderID uuid.UUID
+	PaymentOrderID uuid.UUID
 	Value          float64
 	Date           time.Time
 }

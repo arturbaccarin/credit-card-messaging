@@ -10,7 +10,7 @@ type Message struct {
 	Messages []string `json:"messages"`
 }
 
-type MessagePaymentOrder struct {
+type PaymentOrderMessage struct {
 	ID        uuid.UUID `json:"id"`
 	Value     float64   `json:"value"`
 	Date      time.Time `json:"date"`

@@ -18,3 +18,15 @@ func NewConnection() *amqp.Connection {
 func NewChannel(conn *amqp.Connection) (*amqp.Channel, error) {
 	return conn.Channel()
 }
+
+func NewDirectExchange(ch *amqp.Channel, name string) error {
+	return ch.ExchangeDeclare(name, "direct", true, false, false, false, nil)
+}
+
+func NewQueue(ch *amqp.Channel, name string) (amqp.Queue, error) {
+	return ch.QueueDeclare(name, true, false, false, false, nil)
+}
+
+func NewBind(ch *amqp.Channel, queue *amqp.Queue, key, exchange string) error {
+	return ch.QueueBind(queue.Name, key, exchange, false, nil)
+}

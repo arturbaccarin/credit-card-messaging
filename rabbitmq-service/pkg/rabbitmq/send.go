@@ -8,30 +8,17 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
-func Publish(ch *amqp.Channel, message string) {
-	defer ch.Close()
-	q, err := ch.QueueDeclare(
-		"hello", // name
-		false,   // durable
-		false,   // delete when unused
-		false,   // exclusive
-		false,   // no-wait
-		nil,     // arguments
-	)
-	if err != nil {
-		log.Panicf("%s: %s", "Failed to declare a queue", err)
-	}
-
+func Publish(ch *amqp.Channel, key string, message string) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	err = ch.PublishWithContext(ctx,
-		"",     // exchange
-		q.Name, // routing key
-		false,  // mandatory
-		false,  // immediate
+	err := ch.PublishWithContext(ctx,
+		"exchange", // exchange
+		key,        // routing key
+		false,      // mandatory
+		false,      // immediate
 		amqp.Publishing{
-			ContentType: "text/plain",
+			ContentType: "application/json",
 			Body:        []byte(message),
 		})
 	if err != nil {

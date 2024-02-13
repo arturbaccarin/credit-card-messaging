@@ -11,8 +11,7 @@ type Message struct {
 }
 
 type PaymentOrderMessage struct {
-	ID        uuid.UUID `json:"id"`
-	Value     float64   `json:"value"`
-	Date      time.Time `json:"date"`
-	NeedAudit bool      `json:"need_audit"`
+	ID    uuid.UUID `json:"id"`
+	Value float64   `json:"value"`
+	Date  time.Time `json:"date"`
 }

@@ -8,6 +8,6 @@ import (
 
 type AuditOrder struct {
 	ID             int
-	paymentOrderID uuid.UUID
+	PaymentOrderID uuid.UUID
 	Date           time.Time
 }

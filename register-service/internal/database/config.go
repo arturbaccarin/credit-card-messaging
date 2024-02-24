@@ -7,7 +7,7 @@ import (
 )
 
 func StartDB() *gorm.DB {
-	db, err := gorm.Open(sqlite.Open("../../internal/database/registerDB.db"), &gorm.Config{})
+	db, err := gorm.Open(sqlite.Open("./internal/database/registerDB.db"), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}

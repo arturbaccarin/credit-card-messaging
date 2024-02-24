@@ -15,36 +15,55 @@ func main() {
 	println("Starting register service")
 
 	db := database.StartDB()
+
 	processAuditMessages(db)
 	processPaymentMessages(db)
 }
 
 func processAuditMessages(db *gorm.DB) {
-	messages, err := receiveMessages("a")
+	messages, err := receiveMessages("audit")
 	if err != nil {
 		println(err)
+		return
+	}
+
+	if len(messages) == 0 {
+		println("no new audit messages")
+		return
+	} else {
+		fmt.Printf("%d new audit messages!\n", len(messages))
 	}
 
 	err = registerAuditOrders(db, messages)
 	if err != nil {
 		println(err)
+		return
 	}
 }
 
 func processPaymentMessages(db *gorm.DB) {
-	messages, err := receiveMessages("r")
+	messages, err := receiveMessages("register")
 	if err != nil {
 		println(err)
+		return
+	}
+
+	if len(messages) == 0 {
+		println("no new payment messages")
+		return
+	} else {
+		fmt.Printf("%d new payment messages!\n", len(messages))
 	}
 
 	err = registerPaymentOrder(db, messages)
 	if err != nil {
 		println(err)
+		return
 	}
 }
 
-func receiveMessages(key string) ([]string, error) {
-	url := "http://localhost:3000/receive?k=" + key
+func receiveMessages(queue string) ([]string, error) {
+	url := "http://localhost:3000/receive?q=" + queue
 
 	resp, err := http.Get(url)
 	if err != nil {

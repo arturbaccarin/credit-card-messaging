@@ -31,8 +31,8 @@ func main() {
 	sendHandler := handler.NewSendHandler(ch)
 	receiveHandler := handler.NewReceiveHandler(ch)
 
-	app.Post("/send", sendHandler.SendMessage)
-	app.Get("/receive", receiveHandler.ReceiveMessages)
+	app.Post("/messages", sendHandler.SendMessage)
+	app.Get("/messages", receiveHandler.ReceiveMessages)
 
 	log.Fatal(app.Listen(":3000"))
 }

@@ -58,7 +58,7 @@ func sendMessage(needAudit bool, payload []byte) {
 		key = "r"
 	}
 
-	url := fmt.Sprintf("http://localhost:3000/send?k=%s", key)
+	url := fmt.Sprintf("http://localhost:3000/messages?k=%s", key)
 
 	_, err := http.Post(url, "application/json", bytes.NewBuffer(payload))
 	if err != nil {

@@ -63,7 +63,7 @@ func processPaymentMessages(db *gorm.DB) {
 }
 
 func receiveMessages(queue string) ([]string, error) {
-	url := "http://localhost:3000/receive?q=" + queue
+	url := "http://localhost:3000/messages?q=" + queue
 
 	resp, err := http.Get(url)
 	if err != nil {
